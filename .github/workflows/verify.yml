@@ -1,0 +1,24 @@
+name: Verify Arduino firmware
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Desktop behavioral tests (mock hardware)
+        run: bash scripts/run_host_tests.sh
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install board and libraries
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr@1.8.6
+          arduino-cli lib install "LiquidCrystal@1.0.7" "Stepper@1.1.3" "RTClib@2.1.4"
+      - name: Compile all five Mega sketches
+        run: bash scripts/compile_all.sh
