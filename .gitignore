@@ -1,0 +1,12 @@
+.build/
+build/
+*.hex
+*.elf
+*.o
+*.a
+*.bin
+.pio/
+.DS_Store
+*.log
+.env
+.env.*
